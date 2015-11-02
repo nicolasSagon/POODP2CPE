@@ -1,7 +1,5 @@
 package vue;
 
-import java.util.Observable;
-import java.util.Observer;
 
 import controller.controllerLocal.ChessGameController;
 import model.Coord;
@@ -13,22 +11,23 @@ import model.Coord;
  * Inspiration Jacques SARAYDARYAN, Adrien GUENARD *
  * 
  */
-public class ChessGameCmdLine implements Observer {
+public class ChessGameCmdLine implements IObserver {
 	
 	private ChessGameController chessGameController;
 	
 	public ChessGameCmdLine() {
-		chessGameController = new ChessGameController((Observer) this);
-		while(true){
-			
-		}
+		chessGameController = new ChessGameController(this);
+		chessGameController.move(new Coord(0,6), new Coord(0,5));
+		chessGameController.move(new Coord(1,1), new Coord(1,3));
+		chessGameController.move(new Coord(0,5), new Coord(0,4));
+		chessGameController.move(new Coord(1,3), new Coord(0,4));
 		
 	}
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
+	public void update(String data) {
 		System.out.println("test");
-		System.out.println(arg1);		
+		System.out.println(data);		
 	}
 
 }

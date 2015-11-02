@@ -1,13 +1,13 @@
 package model.observable;
 
 import java.util.List;
-import java.util.Observable;
 
 import model.Coord;
+import model.Couleur;
 import model.Echiquier;
 import model.PieceIHM;
 
-public class ChessGame extends Observable {
+public class ChessGame extends AbstractObservable {
 
 	private Echiquier echiquier;
 	private String lastDepl;
@@ -18,7 +18,7 @@ public class ChessGame extends Observable {
 	}
 	
 	public void init() {
-		this.notifyObservers(this.toString());
+		this.notifyAll(this.toString());
 	}
 
 	public List<PieceIHM> getPiecesIHM() {
@@ -34,10 +34,22 @@ public class ChessGame extends Observable {
 				echiquier.switchJoueur();
 			}
 		}
-		this.notifyObservers(this.toString());
+		this.notifyAll(this.toString());
 	}
 	
 	public String toString() {
 		return lastDepl + echiquier.getMessage() + "\n" + echiquier;
+	}
+	
+	public boolean isEnd() {
+		return echiquier.isEnd();
+	}
+	
+	public String getMessage()  {
+		return echiquier.getMessage();
+	}
+	
+	public Couleur getColorCurrentPlayer() {
+		return this.echiquier.getColorCurrentPlayer();
 	}
 }
