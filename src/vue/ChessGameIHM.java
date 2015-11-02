@@ -7,10 +7,10 @@ import javax.swing.*;
 
 import tools.ChessImageProvider;
 import model.Coord;
-import model.Couleur;
 import model.PieceIHM;
 import controller.controllerLocal.ChessGameController;
 
+@SuppressWarnings("serial")
 public class ChessGameIHM extends JFrame implements MouseListener,
 		MouseMotionListener, IObserver {
 
@@ -147,10 +147,8 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 		System.out.println(data);
 		
 		// TODO Auto-generated method stub
-		for(int i = 0; i < 64; i++){
-		
+		for(int i = 0; i < 64; i++) {
 			((JPanel)chessBoard.getComponent(i)).removeAll();
-		
 		}
 		for(PieceIHM piece : list){
 			for(Coord coord : piece.getList()){
