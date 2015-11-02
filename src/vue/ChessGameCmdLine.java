@@ -1,8 +1,11 @@
 package vue;
 
 
+import java.util.List;
+
 import controller.controllerLocal.ChessGameController;
 import model.Coord;
+import model.PieceIHM;
 
 
 
@@ -25,8 +28,7 @@ public class ChessGameCmdLine implements IObserver {
 	}
 
 	@Override
-	public void update(String data) {
-		System.out.println("test");
+	public void update(String data, List<PieceIHM> list) {
 		System.out.println(data);		
 	}
 

@@ -18,7 +18,7 @@ public class ChessGame extends AbstractObservable {
 	}
 	
 	public void init() {
-		this.notifyAll(this.toString());
+		this.notifyAll(this.toString(), this.getPiecesIHM());
 	}
 
 	public List<PieceIHM> getPiecesIHM() {
@@ -34,7 +34,7 @@ public class ChessGame extends AbstractObservable {
 				echiquier.switchJoueur();
 			}
 		}
-		this.notifyAll(this.toString());
+		this.notifyAll(this.toString(), this.getPiecesIHM());
 	}
 	
 	public String toString() {

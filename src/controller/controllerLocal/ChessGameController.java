@@ -1,8 +1,8 @@
 package controller.controllerLocal;
-
 import vue.IObserver;
 import model.Coord;
 import model.Couleur;
+import model.PieceIHM;
 import model.observable.ChessGame;
 
 public class ChessGameController implements IChessGameController {
@@ -41,6 +41,10 @@ public class ChessGameController implements IChessGameController {
 	@Override
 	public Couleur getColorCurrentPlayer() {
 		return chessGame.getColorCurrentPlayer();
+	}
+	
+	public java.util.List<PieceIHM> getPiecesIHM() {
+		return chessGame.getPiecesIHM();
 	}
 
 }
