@@ -1,8 +1,6 @@
 package launcher.localLauncher;
 
-import model.observable.ChessGame;
 import vue.ChessGameCmdLine;
-import controller.controllerLocal.ChessGameController;
 
 
 /**
@@ -11,15 +9,9 @@ import controller.controllerLocal.ChessGameController;
  */
 public class LauncherCmdLine {
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) {	
+		new ChessGameCmdLine();
 		
-		ChessGame chessGame;
-		ChessGameController chessGameControler;		
-		
-		chessGame = new ChessGame();	
-		chessGameControler = new ChessGameController(chessGame);
-		
-		new ChessGameCmdLine(chessGameControler);	
 	}
 
 }

@@ -1,5 +1,8 @@
 package vue;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import controller.controllerLocal.ChessGameController;
 import model.Coord;
 
@@ -10,37 +13,22 @@ import model.Coord;
  * Inspiration Jacques SARAYDARYAN, Adrien GUENARD *
  * 
  */
-public class ChessGameCmdLine {
+public class ChessGameCmdLine implements Observer {
 	
-	public ChessGameCmdLine(ChessGameController chessGameControler) {
+	private ChessGameController chessGameController;
+	
+	public ChessGameCmdLine() {
+		chessGameController = new ChessGameController((Observer) this);
+		while(true){
+			
+		}
 		
-		System.out.println(chessGameControler + "\n");
-		
-		chessGameControler.move(new Coord(3,6), new Coord(3, 4));	// true
-		System.out.print("\n Déplacement de 3,6 vers 3,4 : ");
-		System.out.println(chessGameControler.getMessage() + "\n");	
-		System.out.println(chessGameControler + "\n");
-		
-		chessGameControler.move(new Coord(3,4), new Coord(3, 6));	// false
-		System.out.print("\n Déplacement de 3,4 vers 3,6 : ");
-		System.out.println(chessGameControler.getMessage() + "\n");	
-		System.out.println(chessGameControler + "\n");
-		
-		chessGameControler.move(new Coord(4, 1), new Coord(4, 3));	// true
-		System.out.print("\n Déplacement de 4,1 vers 4,3 : ");
-		System.out.println(chessGameControler.getMessage() + "\n");	
-		System.out.println(chessGameControler + "\n");
-		
-		chessGameControler.move(new Coord(3, 4), new Coord(3, 4));	// false
-		System.out.print("\n Déplacement de 3,4 vers 3,4 : ");
-		System.out.println(chessGameControler.getMessage() + "\n");	
-		System.out.println(chessGameControler + "\n");
-		
-		chessGameControler.move(new Coord(3, 4), new Coord(4, 3));	// true
-		System.out.print("\n Déplacement de 3,4 vers 4,3 : ");
-		System.out.println(chessGameControler.getMessage() + "\n");	
-		System.out.println(chessGameControler + "\n");
-		
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		System.out.println("test");
+		System.out.println(arg1);		
 	}
 
 }

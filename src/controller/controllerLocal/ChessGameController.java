@@ -1,27 +1,24 @@
 package controller.controllerLocal;
 
+import java.util.Observer;
+
 import model.Coord;
 import model.observable.ChessGame;
 
 public class ChessGameController {
 	
-	private String message;
-	@SuppressWarnings("unused")
 	private ChessGame chessGame;
 	
-	public ChessGameController(ChessGame chessGame)
+	public ChessGameController(Observer vue)
 	{
-		this.chessGame = chessGame;
+		this.chessGame = new ChessGame();
+		chessGame.addObserver(vue);
+		this.chessGame.init();
 	}
 	
 	public void move(Coord a, Coord b)
 	{
-		
-	}
-	
-	public String getMessage()
-	{
-		return message;
+		chessGame.move(a, b);
 	}
 
 }
