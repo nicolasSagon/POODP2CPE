@@ -1,56 +1,47 @@
 package controller.controllerLocal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.net.InetAddress;
-import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
+import model.Communication;
+import model.Coord;
 import model.Couleur;
-import model.PieceIHM;
+import model.observable.AbstractObservable;
 
-public class ChessGameControllerClient implements Runnable, IChessGameController {
-
-	private Socket socket;
+public class ChessGameControllerClient extends AbstractObservable implements
+		IChessGameController{
 	
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		try {
-			socket = new Socket(InetAddress.getLocalHost(), 2000);
-			ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-			List<PieceIHM> result = (List<PieceIHM>)input.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public ChessGameControllerClient() {
 	}
 
 	@Override
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
-		// TODO Auto-generated method stub
-		return false;
+		List<Coord> coords = new ArrayList<Coord>();
+		coords.add(0, new Coord(xInit, yInit));
+		coords.add(1,new Coord(xFinal, yFinal));
+		Communication communication = new Communication(1, coords);
+		this.notifyAll("", communication);
+		return true;
 	}
 
 	@Override
 	public boolean isEnd() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public String getMessage() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Couleur getColorCurrentPlayer() {
-		// TODO Auto-generated method stub
 		return null;
-	}	
+	}
 	
+	public void init() {
+		Communication communication = new Communication(2, null);
+		this.notifyAll("", communication);
+	}
+
 }

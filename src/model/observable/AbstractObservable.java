@@ -2,8 +2,6 @@ package model.observable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import model.PieceIHM;
 import vue.IObserver;
 
 public abstract class AbstractObservable {
@@ -19,9 +17,9 @@ public abstract class AbstractObservable {
 		observers.add(observer);
 	}
 	
-	public void notifyAll(String data, List<PieceIHM> list) {
+	public void notifyAll(String data, Object dataObj) {
 		for(IObserver observer : observers) {
-			observer.update(data, list);
+			observer.update(data, dataObj);
 		}
 	}
 	

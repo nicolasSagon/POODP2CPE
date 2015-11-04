@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,7 +10,8 @@ import java.util.List;
  * en vue d'une utilisation par une IHM
  * 
  */
-public class PieceIHM {
+@SuppressWarnings("serial")
+public class PieceIHM implements Serializable {
 	 
 	private String type;
 	private Couleur couleur;

@@ -2,30 +2,55 @@ package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
-import model.observable.ChessGameEnLigne;
-
+import socket.SocketIn;
+import socket.SocketOut;
+import vue.IObserver;
+import controller.controllerLocal.ChessGameControllerServer;
+import model.observable.ChessGame;
 
 public class ChessGameServer {
-	
+
 	private static ServerSocket ss = null;
-	private static Thread t;
-	private static ChessGameEnLigne chessGame;
+	private static ChessGame chessGame;
 
 	public static void main(String[] args) {
 
 		try {
 			ss = new ServerSocket(2000);
-			System.out.println("Le serveur est à l'écoute du port " + ss.getLocalPort());
+			System.out.println("Le serveur est à l'écoute du port "
+					+ ss.getLocalPort());
 
-			chessGame = new ChessGameEnLigne();
-			
-			t = new Thread(new ChessGameAcceptConnexion(ss, chessGame));
-			t.start();
-			
+			chessGame = new ChessGame();
+
+			try {
+				while(true){
+
+					Socket socket = ss.accept();
+					System.out.println("Un client viens de se connecter  ");
+
+
+					ChessGameControllerServer controllerServer = new ChessGameControllerServer(chessGame);
+					SocketIn inThread = new SocketIn(socket);
+					inThread.addObserver((IObserver) controllerServer);
+					
+					Thread t1 = new Thread(inThread);
+					t1.start();
+					SocketOut chessGameServerOut = new SocketOut(socket);
+					chessGame.addObserver((IObserver) chessGameServerOut);
+					Thread t2 = new Thread(chessGameServerOut);
+					t2.start();
+
+				}
+			} catch (IOException e) {
+
+				System.err.println("Erreur serveur");
+			}
 
 		} catch (IOException e) {
-			System.err.println("Le port "+ss.getLocalPort()+" est d�j� utilis� !");
+			System.err.println("Le port " + ss.getLocalPort()
+					+ " est d�j� utilis� !");
 		}
 
 	}

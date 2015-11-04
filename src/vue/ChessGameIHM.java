@@ -9,6 +9,7 @@ import tools.ChessImageProvider;
 import model.Coord;
 import model.PieceIHM;
 import controller.controllerLocal.ChessGameController;
+import controller.controllerLocal.IChessGameController;
 
 @SuppressWarnings("serial")
 public class ChessGameIHM extends JFrame implements MouseListener,
@@ -19,10 +20,21 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 	private JLabel chessPiece;
 	private int xAdjustment;
 	private int yAdjustment;
-	private ChessGameController chessGameController;
+	private IChessGameController chessGameController = null;
 	private int indexStartMove;
 
+	public ChessGameIHM(IChessGameController controller) {		
+		this.init();
+		this.chessGameController = controller;
+	}
+
 	public ChessGameIHM() {
+		this.init();
+		this.chessGameController = new ChessGameController(this);
+		((ChessGameController)this.chessGameController).init();
+	}
+	
+	private void init() {
 		Dimension boardSize = new Dimension(600, 600);
 
 		// Use a Layered Pane for this this application
@@ -50,8 +62,6 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 			else
 				square.setBackground(i % 2 == 0 ? Color.white : Color.blue);
 		}
-		chessGameController = new ChessGameController(this);
-
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -76,54 +86,41 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 	public void mouseDragged(MouseEvent me) {
 		if (chessPiece == null)
 			return;
-		
+
 		chessPiece
 				.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
 	}
 
 	// Drop the chess piece back onto the chess board
 
-	public int getComponentId(Component c){
-		
-		for(int i = 0; i < chessBoard.getComponentCount(); i++){
-			
-			if(chessBoard.getComponent(i) == c.getParent() || chessBoard.getComponent(i) == c)
+	public int getComponentId(Component c) {
+
+		for (int i = 0; i < chessBoard.getComponentCount(); i++) {
+
+			if (chessBoard.getComponent(i) == c.getParent()
+					|| chessBoard.getComponent(i) == c)
 				return i;
 		}
-		
+
 		return -1;
-		
-	
 	}
-	
+
 	public void mouseReleased(MouseEvent e) {
 		if (chessPiece == null)
 			return;
-		
+
 		Component c = chessBoard.findComponentAt(e.getX(), e.getY());
 		int id = getComponentId(c);
-		
+
 		int xInit = indexStartMove % 8;
 		int yInit = (indexStartMove - xInit) / 8;
-		
+
 		int xFinal = id % 8;
-		int yFinal = (id - xFinal)/8;
-		
+		int yFinal = (id - xFinal) / 8;
+
 		chessGameController.move(xInit, yInit, xFinal, yFinal);
-		
+
 		chessPiece.setVisible(false);
-		/*Component c = chessBoard.findComponentAt(e.getX(), e.getY());
-
-		if (c instanceof JLabel) {
-			Container parent = c.getParent();
-			parent.remove(0);
-			parent.add(chessPiece);
-		} else {
-			Container parent = (Container) c;
-			parent.add(chessPiece);
-		}
-
-		chessPiece.setVisible(true);*/
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -141,21 +138,25 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void update(String data, java.util.List<PieceIHM> list) {
-		
-		System.out.println(data);
-		
+	public void update(String dataStr, Object dataObj) {
+
+		System.out.println(dataStr);
+
 		// TODO Auto-generated method stub
-		for(int i = 0; i < 64; i++) {
-			((JPanel)chessBoard.getComponent(i)).removeAll();
+		for (int i = 0; i < 64; i++) {
+			((JPanel) chessBoard.getComponent(i)).removeAll();
 		}
-		for(PieceIHM piece : list){
-			for(Coord coord : piece.getList()){
+		for (PieceIHM piece : (java.util.List<PieceIHM>) dataObj) {
+			for (Coord coord : piece.getList()) {
 				JLabel pion;
-				pion = new JLabel(new ImageIcon(ChessImageProvider.getImageFile(piece.getTypePiece(), piece.getCouleur())));
-				JPanel panel = (JPanel) chessBoard.getComponent(coord.y * 8 + coord.x);
-				panel.add(pion);			
+				pion = new JLabel(new ImageIcon(
+						ChessImageProvider.getImageFile(piece.getTypePiece(),
+								piece.getCouleur())));
+				JPanel panel = (JPanel) chessBoard.getComponent(coord.y * 8
+						+ coord.x);
+				panel.add(pion);
 			}
 		}
 		this.revalidate();

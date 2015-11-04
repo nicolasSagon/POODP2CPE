@@ -9,23 +9,25 @@ public class ChessGameController implements IChessGameController {
 	
 	private ChessGame chessGame;
 	
+	public ChessGameController(ChessGame model)
+	{
+		this.chessGame = model;
+	}
+	
 	public ChessGameController(IObserver vue)
 	{
 		this.chessGame = new ChessGame();
 		chessGame.addObserver(vue);
-		this.chessGame.init();
 	}
 	
-	public void move(Coord a, Coord b)
-	{
-		chessGame.move(a, b);
+	public void move(Coord cInit, Coord cFinal) {
+		move(cInit.x, cInit.y, cFinal.x, cFinal.y);
 	}
 
 	@Override
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
-
 		chessGame.move(new Coord(xInit, yInit), new Coord(xFinal, yFinal));
-		return false;
+		return true;
 	}
 
 	@Override
@@ -45,6 +47,10 @@ public class ChessGameController implements IChessGameController {
 	
 	public java.util.List<PieceIHM> getPiecesIHM() {
 		return chessGame.getPiecesIHM();
+	}
+	
+	public void init() {
+		this.chessGame.init();
 	}
 
 }
