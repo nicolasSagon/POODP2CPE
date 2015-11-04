@@ -14,6 +14,8 @@ public class ChessGameServer {
 
 	private static ServerSocket ss = null;
 	private static ChessGame chessGame;
+	private static Socket socketBlanche = null;
+	private static Socket socketNoire = null;
 
 	public static void main(String[] args) {
 
@@ -23,25 +25,34 @@ public class ChessGameServer {
 					+ ss.getLocalPort());
 
 			chessGame = new ChessGame();
-
+			int nbConnection = 0;
 			try {
-				while(true){
-
+				while (true) {
+					Boolean isAccept = false;
 					Socket socket = ss.accept();
-					System.out.println("Un client viens de se connecter  ");
+					if (nbConnection == 0) {
+						socketBlanche = socket;
+						isAccept = true;
 
+					} else if (nbConnection == 1) {
+						socketNoire = socket;
+						isAccept = true;
+					}
+					if (isAccept) {
+						System.out.println("Un client viens de se connecter  ");
 
-					ChessGameControllerServer controllerServer = new ChessGameControllerServer(chessGame);
-					SocketIn inThread = new SocketIn(socket);
-					inThread.addObserver((IObserver) controllerServer);
-					
-					Thread t1 = new Thread(inThread);
-					t1.start();
-					SocketOut chessGameServerOut = new SocketOut(socket);
-					chessGame.addObserver((IObserver) chessGameServerOut);
-					Thread t2 = new Thread(chessGameServerOut);
-					t2.start();
+						ChessGameControllerServer controllerServer = new ChessGameControllerServer(
+								chessGame);
+						SocketIn inThread = new SocketIn(socket);
+						inThread.addObserver((IObserver) controllerServer);
 
+						Thread t1 = new Thread(inThread);
+						t1.start();
+						SocketOut chessGameServerOut = new SocketOut(socket);
+						chessGame.addObserver((IObserver) chessGameServerOut);
+						Thread t2 = new Thread(chessGameServerOut);
+						t2.start();
+					}
 				}
 			} catch (IOException e) {
 
