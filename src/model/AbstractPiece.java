@@ -1,5 +1,8 @@
 package model;
 
+import model.strategy.movement.AbstractMovementStrategy;
+import model.strategy.movement.AbstractMovementStrategyFactory;
+
 /**
  * @author francoise.perrin Inspiration Jacques SARAYDARYAN, Adrien GUENARD Gère
  *         le comportement commun à toutes les piéces Chaque classe d�riv�e
@@ -10,6 +13,7 @@ public abstract class AbstractPiece implements IPiece {
 	private int x, y;
 	private Couleur couleur;
 	private String name; // Surtout utile pour affichage en mode console
+	private AbstractMovementStrategy movementStrategy;
 
 	/**
 	 * @param name
@@ -21,6 +25,19 @@ public abstract class AbstractPiece implements IPiece {
 		this.x = coord.x;
 		this.y = coord.y;
 		this.couleur = couleur;
+		//System.out.println(name + " " + this.getClass().getSimpleName());
+		this.setMovementStrategy(AbstractMovementStrategyFactory
+				.createMovementStrategy(this.getClass().getSimpleName()));
+		//System.out.println(name + " " + this.getMovementStrategy().getClass().getSimpleName());
+	}
+
+	protected void setMovementStrategy(AbstractMovementStrategy movementStrategy) {
+		//System.out.println("MODIF STRAT - " + name + " " + movementStrategy.getClass().getSimpleName());
+		this.movementStrategy = movementStrategy;
+	}
+
+	protected AbstractMovementStrategy getMovementStrategy() {
+		return this.movementStrategy;
 	}
 
 	/*
@@ -63,6 +80,10 @@ public abstract class AbstractPiece implements IPiece {
 			this.x = x;
 			this.y = y;
 			ret = true;
+			AbstractMovementStrategy newMovStrat = AbstractMovementStrategy
+					.getNewStrategy(this.getClass().getSimpleName(), x);
+			if (newMovStrat != null)
+				this.setMovementStrategy(newMovStrat);
 		}
 		return ret;
 
@@ -108,6 +129,10 @@ public abstract class AbstractPiece implements IPiece {
 	 * En fonction du type de pi�ce (Pion, etc.) est capable de dire si le
 	 * d�placement est OK
 	 */
-	public abstract boolean isMoveOk(int xFinal, int yFinal);
+	public boolean isMoveOk(int xFinal, int yFinal) {
+		//System.out.println(name + " " + this.getMovementStrategy().getClass().getSimpleName());
+		return this.getMovementStrategy().isMoveOk(x, y, xFinal, yFinal,
+				this.getCouleur());
+	}
 
 };

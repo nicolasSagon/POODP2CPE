@@ -9,6 +9,7 @@ package model;
   * Inspiration Jacques SARAYDARYAN, Adrien GUENARD*
  */
 public class Pion extends AbstractPiece implements IPion {
+	
 	private boolean premierCoup;
 
 	/**
@@ -19,28 +20,6 @@ public class Pion extends AbstractPiece implements IPion {
 	public Pion(String name,Couleur couleur_de_piece, Coord coord) {
 		super(name,couleur_de_piece, coord);
 		this.premierCoup = true;
-	}
-
-	/* (non-Javadoc)
-	 * @see model.AbstractPiece#isMoveOk(int, int)
-	 */
-	@Override
-	public boolean isMoveOk(int xFinal, int yFinal) {
-
-		boolean ret = false;
-
-		if ((xFinal == this.getX())
-				&& (Math.abs(yFinal - this.getY()) <= 1 || 
-				(Math.abs(yFinal - this.getY()) <= 2 && this.premierCoup==true))) {
-
-			if ((Couleur.NOIR.equals(this.getCouleur()) && (yFinal - this.getY() > 0))
-					|| (Couleur.BLANC.equals(this.getCouleur()) 
-							&& (yFinal - this.getY() < 0))) {
-				ret = true;
-			}
-		}
-
-		return ret;
 	}
 
 	/* (non-Javadoc)
@@ -81,6 +60,12 @@ public class Pion extends AbstractPiece implements IPion {
 			ret = super.move(x, y);
 		}
 		return ret;
+	}
+	
+	@Override
+	public boolean isMoveOk(int xFinal, int yFinal) {
+		System.out.println(this.getName() + " " + this.getMovementStrategy().getClass().getSimpleName());
+		return this.getMovementStrategy().isMoveOk(this.getX(), this.getY(), xFinal, yFinal, this.premierCoup, this.getCouleur());
 	}
 
 	

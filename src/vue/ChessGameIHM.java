@@ -5,9 +5,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import tools.ChessImageProvider;
 import model.Coord;
-import model.PieceIHM;
+import model.MessageIHM;
 import controller.controllerLocal.ChessGameController;
 import controller.controllerLocal.IChessGameController;
 
@@ -23,7 +22,7 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 	private IChessGameController chessGameController = null;
 	private int indexStartMove;
 
-	public ChessGameIHM(IChessGameController controller) {		
+	public ChessGameIHM(IChessGameController controller) {
 		this.init();
 		this.chessGameController = controller;
 	}
@@ -31,9 +30,9 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 	public ChessGameIHM() {
 		this.init();
 		this.chessGameController = new ChessGameController(this);
-		((ChessGameController)this.chessGameController).init();
+		((ChessGameController) this.chessGameController).init();
 	}
-	
+
 	private void init() {
 		Dimension boardSize = new Dimension(600, 600);
 
@@ -79,6 +78,11 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 		chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
 		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
 		layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
+		
+		int xInit = indexStartMove % 8;
+		int yInit = (indexStartMove - xInit) / 8;
+		chessGameController.getUnabledMove(new Coord(xInit, yInit));
+		
 	}
 
 	// Move the chess piece around
@@ -138,27 +142,14 @@ public class ChessGameIHM extends JFrame implements MouseListener,
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void update(String dataStr, Object dataObj) {
 
 		System.out.println(dataStr);
 
-		// TODO Auto-generated method stub
-		for (int i = 0; i < 64; i++) {
-			((JPanel) chessBoard.getComponent(i)).removeAll();
-		}
-		for (PieceIHM piece : (java.util.List<PieceIHM>) dataObj) {
-			for (Coord coord : piece.getList()) {
-				JLabel pion;
-				pion = new JLabel(new ImageIcon(
-						ChessImageProvider.getImageFile(piece.getTypePiece(),
-								piece.getCouleur())));
-				JPanel panel = (JPanel) chessBoard.getComponent(coord.y * 8
-						+ coord.x);
-				panel.add(pion);
-			}
-		}
+		MessageIHM com = (MessageIHM) dataObj;
+		com.getStrategy().updateIHM(chessBoard, com.getData());
+		
 		this.revalidate();
 		this.repaint();
 	}

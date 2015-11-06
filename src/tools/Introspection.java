@@ -40,6 +40,16 @@ public class Introspection {
 		return m.invoke(o,args);
 	}
 	
+	public static Object invokeStatic(String className,Object[] args, String nomMethode)  throws Exception	{
+		Class<? extends Object>[] paramTypes = null;
+		if(args != null){
+			paramTypes = new Class<?>[args.length];
+			for(int i=0;i<args.length;++i)	{
+				paramTypes[i] = args[i].getClass();
+			}
+		}
+		return Class.forName(className).getMethod(nomMethode, paramTypes).invoke(null, args);
+	}
 
 	/**
 	 * cr�ation d'un objet connaissant le nom de la classe

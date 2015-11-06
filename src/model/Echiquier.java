@@ -1,15 +1,17 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author francoise.perrin - 
- * Inspiration Jacques SARAYDARYAN, Adrien GUENARD
+ * @author francoise.perrin - Inspiration Jacques SARAYDARYAN, Adrien GUENARD
  * 
- * <p>La clase Echiquier sert de facade aux jeux et piéces
- * qui ne sont pas accessibles de l'extérieur
- * C'est elle qui gére toute la logique métier des déplacements </p>
+ *         <p>
+ *         La clase Echiquier sert de facade aux jeux et piéces qui ne sont pas
+ *         accessibles de l'extérieur C'est elle qui gére toute la logique
+ *         métier des déplacements
+ *         </p>
  *
  */
 public class Echiquier {
@@ -58,6 +60,16 @@ public class Echiquier {
 		return list;
 	}
 
+	public List<Coord> getUnabledMove(Coord c) {
+		List<Coord> listTmp = new ArrayList<Coord>();
+		for (int i = 0; i < 64; i++) {
+			if (this.isMoveOk(c.x, c.y, i % 8, (i - i % 8) / 8)) {
+				listTmp.add(new Coord(i % 8, (i - i % 8) / 8));
+			}
+		}
+		return listTmp;
+	}
+
 	/**
 	 * Permet de vérifier si une piéce peut être déplacée.
 	 * <p>
@@ -92,14 +104,18 @@ public class Echiquier {
 		this.setMessage("KO : la position finale ne correspond pas à "
 				+ "algo de déplacement légal de la piece ");
 
-		// s'il n'existe pas de piece du jeu courant aux coordonnées initiales
-		// --> false
-		this.isPieceToMoveOk = jeuCourant.isPieceHere(xInit, yInit);
-		if (!this.isPieceToMoveOk) {
-			this.isMoveOk = false;
-			this.setMessage("KO : c'est au tour de l'autre joueur");
-		} else {
-			this.isMoveOk = isMoveLegal(xInit, yInit, xFinal, yFinal);
+		if (!(xInit == xFinal && yInit == yFinal)) {
+
+			// s'il n'existe pas de piece du jeu courant aux coordonnées
+			// initiales
+			// --> false
+			this.isPieceToMoveOk = jeuCourant.isPieceHere(xInit, yInit);
+			if (!this.isPieceToMoveOk) {
+				this.isMoveOk = false;
+				this.setMessage("KO : c'est au tour de l'autre joueur");
+			} else {
+				this.isMoveOk = isMoveLegal(xInit, yInit, xFinal, yFinal);
+			}
 		}
 		return this.isMoveOk;
 

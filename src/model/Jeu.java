@@ -50,7 +50,7 @@ public class Jeu {
 		this.couleur = couleur;
 		isPieceToCatch = isMoveOk = false;
 	}
-
+	
 	/**
 	 * @param x
 	 * @param y

@@ -44,4 +44,11 @@ public class ChessGameControllerClient extends AbstractObservable implements
 		this.notifyAll("", communication);
 	}
 
+	@Override
+	public void getUnabledMove(Coord c) {
+		Communication communication = new Communication(3, c);
+		this.notifyAll("", communication);
+		
+	}
+
 }

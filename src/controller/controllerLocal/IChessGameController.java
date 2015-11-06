@@ -1,5 +1,6 @@
 package controller.controllerLocal;
 
+import model.Coord;
 import model.Couleur;
 
 public interface IChessGameController {
@@ -12,4 +13,6 @@ public interface IChessGameController {
 	public String getMessage();
 
 	public Couleur getColorCurrentPlayer();
+	
+	public void getUnabledMove(Coord c);
 }

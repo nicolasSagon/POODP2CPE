@@ -5,7 +5,9 @@ import java.util.List;
 import model.Coord;
 import model.Couleur;
 import model.Echiquier;
+import model.MessageIHM;
 import model.PieceIHM;
+import model.strategy.ihmstrategy.IIHMStrategyFactory;
 
 public class ChessGame extends AbstractObservable {
 
@@ -18,7 +20,7 @@ public class ChessGame extends AbstractObservable {
 	}
 	
 	public void init() {
-		this.notifyAll(this.toString(), this.getPiecesIHM());
+		this.notifyAll(this.toString(), new MessageIHM(this.getPiecesIHM(),IIHMStrategyFactory.getInstance().createUpdateListPieceStrategy()));
 	}
 
 	public List<PieceIHM> getPiecesIHM() {
@@ -34,7 +36,7 @@ public class ChessGame extends AbstractObservable {
 				echiquier.switchJoueur();
 			}
 		}
-		this.notifyAll(this.toString(), this.getPiecesIHM());
+		this.notifyAll(this.toString(), new MessageIHM(this.getPiecesIHM(),IIHMStrategyFactory.getInstance().createUpdateListPieceStrategy()));
 	}
 	
 	public String toString() {
@@ -51,5 +53,9 @@ public class ChessGame extends AbstractObservable {
 	
 	public Couleur getColorCurrentPlayer() {
 		return this.echiquier.getColorCurrentPlayer();
+	}
+	
+	public void getUnabledMove(Coord c){
+		this.notifyAll(this.toString(), new MessageIHM(this.echiquier.getUnabledMove(c), IIHMStrategyFactory.getInstance().createUptadeUnabledMoveStrategy()));
 	}
 }

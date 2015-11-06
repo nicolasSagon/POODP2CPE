@@ -53,4 +53,10 @@ public class ChessGameController implements IChessGameController {
 		this.chessGame.init();
 	}
 
+	@Override
+	public void getUnabledMove(Coord c) {
+		this.chessGame.getUnabledMove(c);
+		
+	}
+
 }

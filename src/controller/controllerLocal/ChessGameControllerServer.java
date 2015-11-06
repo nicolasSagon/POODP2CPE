@@ -8,11 +8,11 @@ import model.Couleur;
 import model.observable.ChessGame;
 import vue.IObserver;
 
-public class ChessGameControllerServer extends ChessGameController implements IObserver{
+public class ChessGameControllerServer extends ChessGameController implements
+		IObserver {
 
-	
 	private Couleur couleur;
-	
+
 	public ChessGameControllerServer(ChessGame model, Couleur couleur) {
 		super(model);
 		this.couleur = couleur;
@@ -21,21 +21,24 @@ public class ChessGameControllerServer extends ChessGameController implements IO
 	@Override
 	public void update(String dataStr, Object dataObj) {
 		Communication message = (Communication) dataObj;
-		switch (message.getCommand()) {
+		switch (message.getCode()) {
 		case 1:
-			if(this.getColorCurrentPlayer() == couleur){
+			if (this.getColorCurrentPlayer() == couleur) {
 				@SuppressWarnings("unchecked")
 				List<Coord> coords = (List<Coord>) (message.getData());
 				this.move(coords.get(0).x, coords.get(0).y, coords.get(1).x,
 						coords.get(1).y);
-			}
-			else {
-				((ChessGameController) this).init();
+			} else {
+				this.init();
 			}
 			break;
 		case 2:
-			((ChessGameController) this).init();
+			this.init();
 			break;
-		}		
+		case 3:
+			this.getUnabledMove((Coord) message.getData());
+			break;
+		}
+
 	}
 }

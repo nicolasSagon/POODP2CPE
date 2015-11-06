@@ -18,19 +18,6 @@ public class Roi extends AbstractPiece {
 		super(name,couleur_de_piece, coord);
 	}
 
-	@Override
-	public boolean isMoveOk(int xFinal, int yFinal) {
-		boolean ret = false;
-		
-		if ((Math.abs(yFinal - this.getY()) <= 1)
-				&& (Math.abs(xFinal - this.getX()) <= 1)) {
-			ret = true;
-		}
-		
-		
-		return ret;
-	}
-
 	
 
 	

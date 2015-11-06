@@ -6,11 +6,11 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class Communication implements Serializable {
 
-	private int command;
+	private int code;
 	private Object data;
 
 	public Communication(int command, Object data) {
-		this.command = command;
+		this.code = command;
 		this.data = data;
 	}
 
@@ -22,18 +22,18 @@ public class Communication implements Serializable {
 		this.data = data;
 	}
 
-	public int getCommand() {
-		return command;
+	public int getCode() {
+		return code;
 	}
 
-	public void setCommand(int command) {
-		this.command = command;
+	public void setCode(int command) {
+		this.code = command;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public String toString() {
-		String str = "Command " + this.command;
-		if (command == 1)
+		String str = "Code " + this.code;
+		if (code == 1)
 			str += " | " + ((List<PieceIHM>)data);
 		return str;
 	}

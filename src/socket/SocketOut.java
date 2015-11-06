@@ -5,7 +5,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import vue.IObserver;
-import model.Communication;
 
 public class SocketOut implements Runnable, IObserver{
 	
